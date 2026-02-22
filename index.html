@@ -1,0 +1,669 @@
+import React, { useState } from 'react';
+import { Plus, Trash2, MapPin, Users, Clock, Shield, FileText, CheckCircle, ChevronRight } from 'lucide-react';
+
+export default function LandholderPortal() {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    projectName: '',
+    location: '',
+    projectType: 'regenerative-agriculture',
+    overview: '',
+    landDetails: '',
+    participationModels: [],
+    tasks: [''],
+    skillsNeeded: [''],
+    duration: '',
+    accommodation: '',
+    meals: false,
+    transportation: false,
+    benefits: '',
+    safetyContact: '',
+    emergencyProtocol: '',
+    onSitePresence: '',
+    hours: '',
+    compensation: '',
+    photos: []
+  });
+
+  const updateField = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const addArrayItem = (field) => {
+    setFormData(prev => ({ ...prev, [field]: [...prev[field], ''] }));
+  };
+
+  const updateArrayItem = (field, index, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: prev[field].map((item, i) => i === index ? value : item)
+    }));
+  };
+
+  const removeArrayItem = (field, index) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: prev[field].filter((_, i) => i !== index)
+    }));
+  };
+
+  const toggleParticipationModel = (model) => {
+    setFormData(prev => ({
+      ...prev,
+      participationModels: prev.participationModels.includes(model)
+        ? prev.participationModels.filter(m => m !== model)
+        : [...prev.participationModels, model]
+    }));
+  };
+
+  const renderStep1 = () => (
+    <div className="space-y-8">
+      <div className="border-l-4 border-amber-600 bg-slate-800 pl-6 pr-6 py-5">
+        <h3 className="font-semibold text-amber-100 text-xl mb-2" style={{ letterSpacing: '-0.01em' }}>Welcome, Landholder</h3>
+        <p className="text-slate-300 leading-relaxed text-base">
+          Create your land project listing to connect with supporters who share your regenerative vision. 
+          Clarity is kindness—the more specific you are, the better the match.
+        </p>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+          Project Name
+        </label>
+        <input
+          type="text"
+          value={formData.projectName}
+          onChange={(e) => updateField('projectName', e.target.value)}
+          placeholder="Earthwork Farm Regenerative Project"
+          className="w-full px-5 py-4 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500 transition-all text-base"
+          style={{ lineHeight: '1.5' }}
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+          Location
+        </label>
+        <div className="relative">
+          <MapPin className="absolute left-4 top-4 h-5 w-5 text-slate-500" />
+          <input
+            type="text"
+            value={formData.location}
+            onChange={(e) => updateField('location', e.target.value)}
+            placeholder="City, State/Region, Country"
+            className="w-full pl-12 pr-5 py-4 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500 transition-all text-base"
+            style={{ lineHeight: '1.5' }}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+          Project Type
+        </label>
+        <select
+          value={formData.projectType}
+          onChange={(e) => updateField('projectType', e.target.value)}
+          className="w-full px-5 py-4 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all appearance-none cursor-pointer text-base"
+          style={{ lineHeight: '1.5' }}
+        >
+          <option value="regenerative-agriculture">Regenerative Agriculture</option>
+          <option value="intentional-community">Intentional Community</option>
+          <option value="permaculture">Permaculture Design</option>
+          <option value="eco-village">Eco-Village</option>
+          <option value="food-forest">Food Forest</option>
+          <option value="conservation">Conservation Project</option>
+          <option value="retreat-center">Retreat/Learning Center</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+          Project Overview
+        </label>
+        <textarea
+          value={formData.overview}
+          onChange={(e) => updateField('overview', e.target.value)}
+          placeholder="Describe your vision, mission, and what makes this land special..."
+          rows={5}
+          className="w-full px-5 py-4 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500 transition-all resize-none text-base leading-relaxed"
+        />
+        <p className="text-sm text-slate-500 mt-2">Minimum 100 characters</p>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+          Land Details
+        </label>
+        <textarea
+          value={formData.landDetails}
+          onChange={(e) => updateField('landDetails', e.target.value)}
+          placeholder="Size, terrain, climate, existing infrastructure, water sources..."
+          rows={4}
+          className="w-full px-5 py-4 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500 transition-all resize-none text-base leading-relaxed"
+        />
+      </div>
+    </div>
+  );
+
+  const renderStep2 = () => (
+    <div className="space-y-8">
+      <div className="border-l-4 border-emerald-500 bg-slate-800 pl-6 pr-6 py-5">
+        <h3 className="font-semibold text-emerald-100 text-xl mb-2" style={{ letterSpacing: '-0.01em' }}>Participation Models</h3>
+        <p className="text-slate-300 leading-relaxed text-base">
+          Select all that apply. Clear agreements build freedom, not restriction.
+        </p>
+      </div>
+
+      <div className="space-y-3">
+        {[
+          { id: 'volunteer', label: 'Volunteer', desc: 'Unpaid contribution, meals/housing provided' },
+          { id: 'work-trade', label: 'Work-Trade', desc: 'Exchange work for accommodation, meals, learning' },
+          { id: 'paid-task', label: 'Paid Task', desc: 'Compensated work with clear deliverables' },
+          { id: 'skill-exchange', label: 'Skill Exchange', desc: 'Mutual learning and skill sharing' },
+          { id: 'micro-funding', label: 'Micro-Investment', desc: 'Financial contribution with potential returns' }
+        ].map(model => (
+          <label key={model.id} className="flex items-start p-5 border-2 rounded-lg cursor-pointer transition-all group hover:border-emerald-500/50"
+            style={{ 
+              borderColor: formData.participationModels.includes(model.id) ? '#10b981' : '#334155',
+              backgroundColor: formData.participationModels.includes(model.id) ? '#064e3b' : '#1e293b'
+            }}>
+            <input
+              type="checkbox"
+              checked={formData.participationModels.includes(model.id)}
+              onChange={() => toggleParticipationModel(model.id)}
+              className="mt-1 h-5 w-5 text-emerald-600 rounded border-slate-600 bg-slate-800"
+            />
+            <div className="ml-4">
+              <div className="font-semibold text-slate-100 text-base">{model.label}</div>
+              <div className="text-base text-slate-400 mt-1 leading-relaxed">{model.desc}</div>
+            </div>
+          </label>
+        ))}
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+          Tasks & Responsibilities
+        </label>
+        <p className="text-base text-slate-400 mb-3">What work needs to be done?</p>
+        {formData.tasks.map((task, idx) => (
+          <div key={idx} className="flex gap-3 mb-3">
+            <input
+              type="text"
+              value={task}
+              onChange={(e) => updateArrayItem('tasks', idx, e.target.value)}
+              placeholder="Garden maintenance, animal care, construction..."
+              className="flex-1 px-5 py-3.5 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 placeholder-slate-500 transition-all text-base"
+              style={{ lineHeight: '1.5' }}
+            />
+            {formData.tasks.length > 1 && (
+              <button
+                onClick={() => removeArrayItem('tasks', idx)}
+                className="p-3 text-red-400 hover:bg-red-950 rounded-lg transition-colors"
+              >
+                <Trash2 className="h-5 w-5" />
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          onClick={() => addArrayItem('tasks')}
+          className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 text-base font-medium mt-2 transition-colors"
+        >
+          <Plus className="h-5 w-5" /> Add Task
+        </button>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+          Skills Needed
+        </label>
+        {formData.skillsNeeded.map((skill, idx) => (
+          <div key={idx} className="flex gap-3 mb-3">
+            <input
+              type="text"
+              value={skill}
+              onChange={(e) => updateArrayItem('skillsNeeded', idx, e.target.value)}
+              placeholder="Carpentry, cooking, permaculture knowledge..."
+              className="flex-1 px-5 py-3.5 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 placeholder-slate-500 transition-all text-base"
+              style={{ lineHeight: '1.5' }}
+            />
+            {formData.skillsNeeded.length > 1 && (
+              <button
+                onClick={() => removeArrayItem('skillsNeeded', idx)}
+                className="p-3 text-red-400 hover:bg-red-950 rounded-lg transition-colors"
+              >
+                <Trash2 className="h-5 w-5" />
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          onClick={() => addArrayItem('skillsNeeded')}
+          className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 text-base font-medium mt-2 transition-colors"
+        >
+          <Plus className="h-5 w-5" /> Add Skill
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+            Expected Duration
+          </label>
+          <input
+            type="text"
+            value={formData.duration}
+            onChange={(e) => updateField('duration', e.target.value)}
+            placeholder="2 weeks, 1-3 months, seasonal"
+            className="w-full px-5 py-4 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 placeholder-slate-500 transition-all text-base"
+            style={{ lineHeight: '1.5' }}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+            Work Hours/Expectations
+          </label>
+          <input
+            type="text"
+            value={formData.hours}
+            onChange={(e) => updateField('hours', e.target.value)}
+            placeholder="4-6 hours/day, 5 days/week"
+            className="w-full px-5 py-4 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 placeholder-slate-500 transition-all text-base"
+            style={{ lineHeight: '1.5' }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderStep3 = () => (
+    <div className="space-y-8">
+      <div className="border-l-4 border-blue-500 bg-slate-800 pl-6 pr-6 py-5">
+        <h3 className="font-semibold text-blue-100 text-xl mb-2" style={{ letterSpacing: '-0.01em' }}>What You Provide</h3>
+        <p className="text-slate-300 leading-relaxed text-base">
+          Be clear about accommodation, meals, and other benefits.
+        </p>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+          Accommodation Details
+        </label>
+        <textarea
+          value={formData.accommodation}
+          onChange={(e) => updateField('accommodation', e.target.value)}
+          placeholder="Describe sleeping arrangements: private room, shared space, tent camping..."
+          rows={4}
+          className="w-full px-5 py-4 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 placeholder-slate-500 transition-all resize-none text-base leading-relaxed"
+        />
+      </div>
+
+      <div className="space-y-3">
+        <label className="flex items-center gap-4 p-5 border-2 border-slate-700 rounded-lg cursor-pointer hover:border-emerald-500/50 transition-all bg-slate-800">
+          <input
+            type="checkbox"
+            checked={formData.meals}
+            onChange={(e) => updateField('meals', e.target.checked)}
+            className="h-5 w-5 text-emerald-600 rounded border-slate-600 bg-slate-800"
+          />
+          <span className="text-slate-200 font-medium text-base">Meals provided</span>
+        </label>
+
+        <label className="flex items-center gap-4 p-5 border-2 border-slate-700 rounded-lg cursor-pointer hover:border-emerald-500/50 transition-all bg-slate-800">
+          <input
+            type="checkbox"
+            checked={formData.transportation}
+            onChange={(e) => updateField('transportation', e.target.checked)}
+            className="h-5 w-5 text-emerald-600 rounded border-slate-600 bg-slate-800"
+          />
+          <span className="text-slate-200 font-medium text-base">Transportation assistance</span>
+        </label>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+          Additional Benefits
+        </label>
+        <textarea
+          value={formData.benefits}
+          onChange={(e) => updateField('benefits', e.target.value)}
+          placeholder="Learning opportunities, workshops, community meals, land access, skill training..."
+          rows={4}
+          className="w-full px-5 py-4 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 placeholder-slate-500 transition-all resize-none text-base leading-relaxed"
+        />
+      </div>
+
+      {formData.participationModels.includes('paid-task') && (
+        <div>
+          <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+            Compensation Details
+          </label>
+          <input
+            type="text"
+            value={formData.compensation}
+            onChange={(e) => updateField('compensation', e.target.value)}
+            placeholder="$15/hour, $500/week, project-based payment"
+            className="w-full px-5 py-4 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 placeholder-slate-500 transition-all text-base"
+            style={{ lineHeight: '1.5' }}
+          />
+        </div>
+      )}
+    </div>
+  );
+
+  const renderStep4 = () => (
+    <div className="space-y-8">
+      <div className="border-l-4 border-red-500 bg-slate-800 pl-6 pr-6 py-5">
+        <div className="flex items-start gap-3">
+          <Shield className="h-7 w-7 text-red-400 mt-0.5 flex-shrink-0" />
+          <div>
+            <h3 className="font-semibold text-red-100 text-xl mb-2" style={{ letterSpacing: '-0.01em' }}>Safety is Sacred</h3>
+            <p className="text-slate-300 leading-relaxed text-base">
+              This information helps supporters feel safe and builds trust. Be thorough and honest.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+          On-Site Presence
+        </label>
+        <textarea
+          value={formData.onSitePresence}
+          onChange={(e) => updateField('onSitePresence', e.target.value)}
+          placeholder="Who will be on-site? How many people? Are there women/families present? Community structure?"
+          rows={4}
+          className="w-full px-5 py-4 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 placeholder-slate-500 transition-all resize-none text-base leading-relaxed"
+        />
+        <p className="text-sm text-slate-500 mt-2">Transparency builds trust, especially for solo travelers</p>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+          Emergency Contact
+        </label>
+        <input
+          type="text"
+          value={formData.safetyContact}
+          onChange={(e) => updateField('safetyContact', e.target.value)}
+          placeholder="Name, role, phone number"
+          className="w-full px-5 py-4 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 placeholder-slate-500 transition-all mb-3 text-base"
+          style={{ lineHeight: '1.5' }}
+        />
+        <label className="block text-sm font-semibold text-slate-200 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>
+          Emergency Protocol
+        </label>
+        <textarea
+          value={formData.emergencyProtocol}
+          onChange={(e) => updateField('emergencyProtocol', e.target.value)}
+          placeholder="What happens in case of emergency? Nearest hospital, evacuation plan..."
+          rows={3}
+          className="w-full px-5 py-4 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-emerald-500 placeholder-slate-500 transition-all resize-none text-base leading-relaxed"
+        />
+      </div>
+
+      <div className="bg-slate-800 border border-amber-700 rounded-lg p-6">
+        <h4 className="font-semibold text-amber-300 mb-4 text-base uppercase" style={{ letterSpacing: '0.05em' }}>Safety Guidelines for Supporters</h4>
+        <ul className="text-base text-slate-300 space-y-2.5 leading-relaxed">
+          <li className="flex items-start gap-2">
+            <ChevronRight className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
+            <span>Always trust your intuition</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <ChevronRight className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
+            <span>Keep emergency contacts accessible</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <ChevronRight className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
+            <span>Share your location with trusted contacts</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <ChevronRight className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
+            <span>Review agreements carefully before arrival</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+
+  const renderStep5 = () => (
+    <div className="space-y-8">
+      <div className="border-l-4 border-emerald-500 bg-slate-800 pl-6 pr-6 py-5">
+        <div className="flex items-start gap-3">
+          <CheckCircle className="h-7 w-7 text-emerald-400 mt-0.5 flex-shrink-0" />
+          <div>
+            <h3 className="font-semibold text-emerald-100 text-xl mb-2" style={{ letterSpacing: '-0.01em' }}>Review Your Listing</h3>
+            <p className="text-slate-300 leading-relaxed text-base">
+              Preview how supporters will see your project. You can edit before publishing.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="border border-slate-700 rounded-lg p-8 bg-slate-800/50">
+        <h2 className="text-3xl font-bold text-slate-100 mb-3" style={{ letterSpacing: '-0.02em' }}>{formData.projectName || 'Your Project Name'}</h2>
+        <div className="flex items-center gap-2 text-slate-400 mb-6">
+          <MapPin className="h-5 w-5" />
+          <span className="text-lg">{formData.location || 'Location not specified'}</span>
+        </div>
+
+        <div className="mb-6">
+          <span className="inline-block bg-emerald-900/50 text-emerald-300 text-base px-4 py-2 rounded-full border border-emerald-700">
+            {formData.projectType.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+          </span>
+        </div>
+
+        <div className="mb-8">
+          <h3 className="text-sm font-semibold text-slate-300 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>About This Project</h3>
+          <p className="text-slate-300 leading-relaxed text-base">{formData.overview || 'No overview provided yet'}</p>
+        </div>
+
+        {formData.participationModels.length > 0 && (
+          <div className="mb-8">
+            <h3 className="text-sm font-semibold text-slate-300 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>Participation Options</h3>
+            <div className="flex flex-wrap gap-2">
+              {formData.participationModels.map(model => (
+                <span key={model} className="bg-blue-900/50 text-blue-300 text-base px-4 py-2 rounded-full border border-blue-700">
+                  {model.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {formData.tasks.some(t => t) && (
+          <div className="mb-8">
+            <h3 className="text-sm font-semibold text-slate-300 mb-3 uppercase" style={{ letterSpacing: '0.05em' }}>Tasks & Responsibilities</h3>
+            <ul className="space-y-2 text-slate-300 text-base">
+              {formData.tasks.filter(t => t).map((task, idx) => (
+                <li key={idx} className="flex items-start gap-2">
+                  <ChevronRight className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                  <span>{task}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {formData.duration && (
+            <div className="flex items-start gap-3">
+              <Clock className="h-6 w-6 text-slate-500 mt-0.5 flex-shrink-0" />
+              <div>
+                <div className="font-semibold text-slate-200 text-base mb-1">Duration</div>
+                <div className="text-slate-400 text-base">{formData.duration}</div>
+              </div>
+            </div>
+          )}
+          {formData.hours && (
+            <div className="flex items-start gap-3">
+              <Users className="h-6 w-6 text-slate-500 mt-0.5 flex-shrink-0" />
+              <div>
+                <div className="font-semibold text-slate-200 text-base mb-1">Work Hours</div>
+                <div className="text-slate-400 text-base">{formData.hours}</div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="bg-slate-900/50 rounded-lg p-6 mb-8 border border-slate-700">
+          <h3 className="text-sm font-semibold text-slate-300 mb-4 uppercase" style={{ letterSpacing: '0.05em' }}>What We Provide</h3>
+          <div className="space-y-3 text-slate-300 text-base leading-relaxed">
+            <div>
+              <span className="font-medium text-slate-200">Accommodation:</span> {formData.accommodation || 'Not specified'}
+            </div>
+            {formData.meals && <div className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-emerald-500" /> Meals provided</div>}
+            {formData.transportation && <div className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-emerald-500" /> Transportation assistance</div>}
+            {formData.benefits && <div><span className="font-medium text-slate-200">Additional:</span> {formData.benefits}</div>}
+          </div>
+        </div>
+
+        <div className="bg-red-950/30 border border-red-900 rounded-lg p-6">
+          <div className="flex items-start gap-3">
+            <Shield className="h-7 w-7 text-red-400 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <h3 className="font-semibold text-red-200 mb-2 text-base uppercase" style={{ letterSpacing: '0.05em' }}>Safety Information</h3>
+              <p className="text-slate-300 mb-3 text-base leading-relaxed">{formData.onSitePresence || 'Not provided'}</p>
+              {formData.safetyContact && (
+                <p className="text-slate-300 text-base"><span className="font-medium text-red-200">Emergency Contact:</span> {formData.safetyContact}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
+        <h4 className="font-semibold text-slate-200 mb-4 text-base uppercase" style={{ letterSpacing: '0.05em' }}>What Happens Next?</h4>
+        <ol className="text-base text-slate-300 space-y-3 leading-relaxed">
+          <li className="flex items-start gap-3">
+            <span className="font-bold text-emerald-400 text-lg">01</span>
+            <span>Your listing will be reviewed by platform administrators (24-48 hours)</span>
+          </li>
+          <li className="flex items-start gap-3">
+            <span className="font-bold text-emerald-400 text-lg">02</span>
+            <span>Once approved, it will be visible to verified supporters</span>
+          </li>
+          <li className="flex items-start gap-3">
+            <span className="font-bold text-emerald-400 text-lg">03</span>
+            <span>Supporters can express interest and you'll be notified</span>
+          </li>
+          <li className="flex items-start gap-3">
+            <span className="font-bold text-emerald-400 text-lg">04</span>
+            <span>You'll review applications and create agreements with selected supporters</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+  );
+
+  const steps = [
+    { num: 1, label: 'Basic', icon: FileText },
+    { num: 2, label: 'Participation', icon: Users },
+    { num: 3, label: 'Benefits', icon: Plus },
+    { num: 4, label: 'Safety', icon: Shield },
+    { num: 5, label: 'Review', icon: CheckCircle }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={{ fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif' }}>
+      {/* Header */}
+      <header className="bg-slate-900/80 backdrop-blur-sm border-b border-slate-700 sticky top-0 z-10">
+        <div className="max-w-4xl mx-auto px-6 py-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-slate-100 tracking-tight" style={{ letterSpacing: '-0.02em' }}>Stewardship Connect</h1>
+              <p className="text-base text-slate-400 mt-1">Landholder Portal</p>
+            </div>
+            <div className="text-right">
+              <div className="text-base font-semibold text-emerald-400">Step {step} of 5</div>
+              <div className="text-sm text-slate-500 uppercase" style={{ letterSpacing: '0.05em' }}>{steps[step-1].label}</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Progress Bar */}
+      <div className="max-w-4xl mx-auto px-6 py-8">
+        <div className="flex items-center justify-between mb-2">
+          {steps.map((s, idx) => {
+            const Icon = s.icon;
+            const isActive = step === s.num;
+            const isComplete = step > s.num;
+            return (
+              <React.Fragment key={s.num}>
+                <div className="flex flex-col items-center">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    isActive ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/50' :
+                    isComplete ? 'bg-emerald-900 text-emerald-400 border-2 border-emerald-700' :
+                    'bg-slate-800 text-slate-500 border-2 border-slate-700'
+                  }`}>
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <span className={`text-sm mt-2 hidden sm:block transition-colors ${
+                    isActive ? 'text-emerald-400 font-semibold' :
+                    isComplete ? 'text-slate-400' :
+                    'text-slate-600'
+                  }`}>{s.label}</span>
+                </div>
+                {idx < steps.length - 1 && (
+                  <div className={`flex-1 h-0.5 mx-3 rounded transition-all duration-300 ${
+                    isComplete ? 'bg-emerald-600' : 'bg-slate-700'
+                  }`} />
+                )}
+              </React.Fragment>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Form Content */}
+      <main className="max-w-4xl mx-auto px-6 pb-12">
+        <div className="bg-slate-900 rounded-xl shadow-2xl border border-slate-700 p-8 md:p-10">
+          {step === 1 && renderStep1()}
+          {step === 2 && renderStep2()}
+          {step === 3 && renderStep3()}
+          {step === 4 && renderStep4()}
+          {step === 5 && renderStep5()}
+
+          {/* Navigation */}
+          <div className="flex justify-between mt-10 pt-8 border-t border-slate-700">
+            <button
+              onClick={() => setStep(Math.max(1, step - 1))}
+              disabled={step === 1}
+              className="px-8 py-3.5 border-2 border-slate-700 text-slate-300 rounded-lg hover:bg-slate-800 hover:border-slate-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all font-medium text-base"
+            >
+              Back
+            </button>
+            {step < 5 ? (
+              <button
+                onClick={() => setStep(Math.min(5, step + 1))}
+                className="px-8 py-3.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg hover:from-emerald-500 hover:to-emerald-600 transition-all font-semibold shadow-lg shadow-emerald-900/50 text-base"
+              >
+                Continue
+              </button>
+            ) : (
+              <button
+                onClick={() => alert('Listing submitted for review! In the full platform, this would hash the agreement on-chain and notify admins.')}
+                className="px-8 py-3.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg hover:from-emerald-500 hover:to-emerald-600 transition-all font-semibold shadow-lg shadow-emerald-900/50 text-base"
+              >
+                Submit for Review
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Footer Message */}
+        <div className="mt-8 text-center">
+          <p className="text-slate-500 text-base italic leading-relaxed">
+            "Stewardship is a birthright. Community functions best when agreements are clear."
+          </p>
+        </div>
+      </main>
+    </div>
+  );
+}
